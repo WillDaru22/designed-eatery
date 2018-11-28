@@ -77,29 +77,29 @@ public class Main extends Application {
 		//nameFilter.setIndeterminate(false);
 		Button nutrientFilter = new Button("Nutrients");
 		nutrientFilter.setOnAction(new EventHandler<ActionEvent>() {
-		    public void handle(ActionEvent event) {
-		        try {
-		            
-		            HBox nutrientBox = new HBox();
-		            nameBox.setPadding(new Insets(15, 12, 15, 12));
-		            nameBox.setSpacing(10);
-                    	    CheckBox vegetableFilter = new CheckBox("Vegetables");
-                            vegetableFilter.setIndeterminate(false);
-                            Button confirmNutrient = new Button("Filter");
-                            confirmNutrient.setPrefSize(100, 20);
-                            nutrientBox.getChildren().addAll(vegetableFilter, confirmNutrient);
-		            Scene scene = new Scene(nutrientBox, 260, 50);
-		            Stage stage = new Stage();
-		            stage.setTitle("Filter By Nutrient");
-		            stage.setScene(scene);
-		            stage.show();
-		            confirmNutrient.setOnAction(ActionEvent -> stage.close());
-		        }
-		        catch (Exception e) {
-		            e.printStackTrace();
-		        }
-		    }
-		});
+            public void handle(ActionEvent event) {
+                try {
+                    
+                    HBox nutrientBox = new HBox();
+                    nutrientBox.setPadding(new Insets(15, 12, 15, 12));
+                    nutrientBox.setSpacing(10);
+                    CheckBox vegetableFilter = new CheckBox("Vegetables");
+                    vegetableFilter.setIndeterminate(false);
+                    Button confirmNutrient = new Button("Filter");
+                    confirmNutrient.setPrefSize(100, 20);
+                    nutrientBox.getChildren().addAll(vegetableFilter, confirmNutrient);
+                    Scene scene = new Scene(nutrientBox, 260, 50);
+                    Stage stage = new Stage();
+                    stage.setTitle("Filter By Nutrient");
+                    stage.setScene(scene);
+                    stage.show();
+                    confirmNutrient.setOnAction(ActionEvent -> stage.close());
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 		//CheckBox nutrientFilter = new CheckBox("Nutrients");
 		//nutrientFilter.setIndeterminate(false);
 		filterHbox.getChildren().addAll(filterLbl, nameFilter, nutrientFilter);
