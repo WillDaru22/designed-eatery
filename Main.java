@@ -45,6 +45,7 @@ public class Main extends Application {
 		HBox filterHbox = new HBox();
 		filterHbox.setSpacing(10);
 		Label filterLbl = new Label("Filter: ");
+		Button nameFilter = new Button("Name");
 		nameFilter.setOnAction(new EventHandler<ActionEvent>() {
 		    public void handle(ActionEvent event) {
 		        try {
