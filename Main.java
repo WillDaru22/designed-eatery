@@ -38,8 +38,8 @@ public class Main extends Application {
 		vbox1.setMaxWidth(200);
 		vbox1.setMinWidth(200);
 		vbox1.setSpacing(12);
-		Text foodLbl = new Text("           All Foods");
-		foodLbl.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
+		Text foodLbl = new Text("        All Foods");
+		foodLbl.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 20));
 		ObservableList<String> foodNames = FXCollections.observableArrayList("Apples", "Asparagus", "Avacado", "Bacon",
 				"Bananas", "Bok Choy", "Celery", "Chocolate", "Cranberries", "Eggs", "Fries", "Gravy", "Green beans",
 				"Ham", "Ice cream", "Jelly", "Lemons", "Lobster", "Mashed potatoes", "Melons", "Noodles", "Pineapples",
