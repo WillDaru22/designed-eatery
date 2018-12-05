@@ -117,12 +117,22 @@ public class Main extends Application {
 					HBox nutrientBox = new HBox();
 					nutrientBox.setPadding(new Insets(15, 12, 15, 12));
 					nutrientBox.setSpacing(10);
-					CheckBox vegetableFilter = new CheckBox("Vegetables");
-					vegetableFilter.setIndeterminate(false);
+					TextField nutrientName = new TextField();
+					nutrientName.setPromptText("Nutrient");
+					nutrientName.setMaxSize(100, 27);
+					nutrientName.setMinSize(100, 27);
+					TextField comparator = new TextField();
+					comparator.setPromptText("Comparator");
+					comparator.setMaxSize(100, 27);
+					comparator.setMinSize(100, 27);
+					TextField nutrientValue = new TextField();
+					nutrientValue.setPromptText("Nutrient value");
+					nutrientValue.setMaxSize(120, 27);
+					nutrientValue.setMinSize(120, 27);
 					Button confirmNutrient = new Button("Filter");
-					confirmNutrient.setPrefSize(100, 20);
-					nutrientBox.getChildren().addAll(vegetableFilter, confirmNutrient);
-					Scene scene = new Scene(nutrientBox, 260, 50);
+					confirmNutrient.setMinSize(100, 27);
+					nutrientBox.getChildren().addAll(nutrientName, comparator, nutrientValue, confirmNutrient);
+					Scene scene = new Scene(nutrientBox, 500, 50);
 					Stage stage = new Stage();
 					stage.setTitle("Filter By Nutrient");
 					stage.setScene(scene);
@@ -161,20 +171,9 @@ public class Main extends Application {
 		vbox2.setMaxWidth(600);
 		vbox2.setSpacing(12);
 
-		// horizontal box for top right part
-		HBox currentMealHbox = new HBox();
-		currentMealHbox.setSpacing(10);
-		currentMealHbox.setMaxHeight(400);
-
 		// text for diaplying current meal
-		Text currentMealLbl = new Text("     Current Meal: ");
+		Text currentMealLbl = new Text("                Current Meal");
 		currentMealLbl.setFont(Font.font("Verdana", FontWeight.BOLD, 30));
-
-		// button for meal name located top rightmost (shown as thanksgiving) TODO: add
-		// more meal names
-		Button mealName = new Button("Thanksgiving");
-		mealName.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
-		currentMealHbox.getChildren().addAll(currentMealLbl, mealName);
 
 		HBox displayFoodNutritionHbox = new HBox();
 		displayFoodNutritionHbox.setSpacing(20);
@@ -228,7 +227,7 @@ public class Main extends Application {
 		totalNutritionList.setMinHeight(134);
 		nutritionVbox.getChildren().addAll(nutritionForFoodHbox, nutritionList, totalNutritionLbl, totalNutritionList);
 		displayFoodNutritionHbox.getChildren().addAll(foodListAndRemoveVbox, nutritionVbox);
-		vbox2.getChildren().addAll(currentMealHbox, displayFoodNutritionHbox);
+		vbox2.getChildren().addAll(currentMealLbl, displayFoodNutritionHbox);
 
 		HBox hbox = new HBox();
 		hbox.setSpacing(20);
