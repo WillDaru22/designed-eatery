@@ -2,6 +2,7 @@ package application;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -172,10 +173,11 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         
         abstract V getVal(K key);
         abstract void removeVal(K key);
-        abstract void insertVal(K key, V val);
         abstract void merge (Node sibling);;
         abstract boolean isUnderflow();
-        
+        int keySize() {
+        	return keys.size();
+        }
         
         
     } // End of abstract class Node
@@ -198,6 +200,8 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          */
         InternalNode() {
             super();
+            this.keys = new ArrayList<K>();
+            this.children = new ArrayList<Node>();
             // TODO : Complete
         }
         
@@ -207,7 +211,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          */
         K getFirstLeafKey() {
             // TODO : Complete
-            return null;
+        	return children.get(0).getFirstLeafKey();  
         }
         
         /**
@@ -216,7 +220,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          */
         boolean isOverflow() {
             // TODO : Complete
-            return false;
+            return children.size() > branchingFactor;
         }
         
         /**
@@ -225,6 +229,17 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          */
         void insert(K key, V value) {
             // TODO : Complete
+        	Node child = getChild(key);
+        	child.insert(key, value);
+        	if (child.isOverflow()) {
+        		Node sibling = split();
+        		InternalNode newRoot = new InternalNode();
+        		newRoot.keys.add(sibling.getFirstLeafKey());
+        		newRoot.children.add(this);
+        		newRoot.children.add(sibling);
+        		root = newRoot;
+        		
+        	}
         }
         
         /**
@@ -233,7 +248,14 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          */
         Node split() {
             // TODO : Complete
-            return null;
+        	int depart = keySize() / 2 + 1, dest = keySize();
+        	InternalNode sibling = new InternalNode();
+        	sibling.keys.addAll(keys.subList(depart, dest));
+        	sibling.children.addAll(children.subList(depart, dest + 1));
+        	
+        	keys.subList(depart - 1, dest).clear();
+        	children.subList(depart, dest + 1).clear();
+            return sibling;
         }
         
         /**
@@ -241,9 +263,42 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#rangeSearch(java.lang.Comparable, java.lang.String)
          */
         List<V> rangeSearch(K key, String comparator) {
-            // TODO : Complete
-            return null;
+           return getChild(key).rangeSearch(key, comparator);
         }
+
+		@Override
+		V getVal(K key) {
+			// TODO Auto-generated method stub
+			return getChild(key).getVal(key);
+		}
+
+		@Override
+		void removeVal(K key) {
+			// TODO Auto-generated method stub
+			
+		}
+
+
+		@Override
+		void merge(BPTree<K, V>.Node sibling) {
+			// TODO Auto-generated method stub
+			InternalNode node = (InternalNode) sibling;
+			keys.add(node.getFirstLeafKey());
+			keys.addAll(node.keys);
+			children.addAll(node.children);
+		}
+		Node getChild(K key) {
+			int location = Collections.binarySearch(keys, key);
+			int childIndex = location >= 0 ? location + 1 : -location - 1;
+			return children.get(childIndex);
+					
+		}
+
+		@Override
+		boolean isUnderflow() {
+			// TODO Auto-generated method stub
+			return children.size() < (branchingFactor + 1) / 2;
+		}
     
     } // End of class InternalNode
     
@@ -319,6 +374,34 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
             // TODO : Complete
             return null;
         }
+
+
+		@Override
+		V getVal(K key) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+
+		@Override
+		void removeVal(K key) {
+			// TODO Auto-generated method stub
+			
+		}
+
+
+		@Override
+		void merge(BPTree<K, V>.Node sibling) {
+			// TODO Auto-generated method stub
+			
+		}
+
+
+		@Override
+		boolean isUnderflow() {
+			// TODO Auto-generated method stub
+			return false;
+		}
         
     } // End of class LeafNode
     
