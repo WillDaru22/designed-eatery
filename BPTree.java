@@ -1,3 +1,5 @@
+package application;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -27,8 +29,11 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
     
     // Branching factor is the number of children nodes 
     // for internal nodes of the tree
-    private int branchingFactor;
+    private static int branchingFactor;
     
+    public BPTree() {
+    	this(branchingFactor);
+    }
     
     /**
      * Public constructor
@@ -40,7 +45,8 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
             throw new IllegalArgumentException(
                "Illegal branching factor: " + branchingFactor);
         }
-        // TODO : Complete
+        this.branchingFactor = branchingFactor;
+        root = new LeafNode();
     }
     
     
@@ -51,6 +57,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
     @Override
     public void insert(K key, V value) {
         // TODO : Complete
+    	root.insert(key, value);
     }
     
     
@@ -65,6 +72,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
             !comparator.contentEquals("<=") )
             return new ArrayList<V>();
         // TODO : Complete
+        
         return null;
     }
     
@@ -161,7 +169,15 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         public String toString() {
             return keys.toString();
         }
-    
+        
+        abstract V getVal(K key);
+        abstract void removeVal(K key);
+        abstract void insertVal(K key, V val);
+        abstract void merge (Node sibling);;
+        abstract boolean isUnderflow();
+        
+        
+        
     } // End of abstract class Node
     
     /**
