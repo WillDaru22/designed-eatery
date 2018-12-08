@@ -90,8 +90,8 @@ public class FoodData implements FoodDataADT<FoodItem> {
       List<FoodItem> filteredItem = filter.get(0);
       return filteredItem;
     } else {
-      List<FoodItem> newList = new ArrayList<FoodItem>();
-      return newList;
+      List<FoodItem> emptyList = new ArrayList<FoodItem>();
+      return emptyList;
     }
   }
 
