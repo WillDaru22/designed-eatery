@@ -95,32 +95,29 @@ public class FoodData implements FoodDataADT<FoodItem> {
     }
   }
 
-  /*
-   * (non-Javadoc)
+  /**
+   * Adds a food item to the loaded data.
    * 
-   * @see skeleton.FoodDataADT#addFoodItem(skeleton.FoodItem)
+   * @param foodItem the food item instance to be added
    */
   @Override
   public void addFoodItem(FoodItem foodItem) {
-    // TODO : Complete
+    foodItemList.add(foodItem);
   }
 
-  /*
-   * (non-Javadoc)
+  /**
+   * Gets the list of all food items.
    * 
-   * @see skeleton.FoodDataADT#getAllFoodItems()
+   * @return list of FoodItem
    */
   @Override
   public List<FoodItem> getAllFoodItems() {
-    // TODO : Complete
-    return null;
+    return foodItemList;
   }
-
 
   @Override
   public void saveFoodItems(String filename) {
     // TODO Auto-generated method stub
     
   }
-
 }
