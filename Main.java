@@ -64,11 +64,28 @@ public class Main extends Application {
 
 		// food list in vertical box. This is hard coded at the moment TODO: import from
 		// file
-		ObservableList<String> foodNames = FXCollections.observableArrayList("Apples", "Asparagus", "Avacado", "Bacon",
+		/*ObservableList<String> foodNames = FXCollections.observableArrayList("Apples", "Asparagus", "Avacado", "Bacon",
 				"Bananas", "Bok Choy", "Celery", "Chocolate", "Cranberries", "Eggs", "Fries", "Gravy", "Green beans",
 				"Ham", "Ice cream", "Jelly", "Lemons", "Lobster", "Mashed potatoes", "Melons", "Noodles", "Pineapples",
 				"Ribs", "Steak", "Turkey", "Yogurt");
 		ListView<String> listOfFoods = new ListView<String>(foodNames);
+		listOfFoods.setPrefSize(150, 120);*/
+		
+		ObservableList<FoodItem> foodList = FXCollections.observableArrayList();
+		ObservableList<String> foodNameList = FXCollections.observableArrayList();
+		foodList.addListener((ListChangeListener<FoodItem>) change -> {
+		    int i = 0;
+		    while (change.next()) {
+		        if(change.wasAdded()) {
+		            foodNameList.add(change.getAddedSubList().get(i).getName());
+		        }
+		        else {
+		            
+		        }
+		        i++;
+		    }
+		});
+		ListView<String> listOfFoods = new ListView<String>(foodNameList);
 		listOfFoods.setPrefSize(150, 120);
 
 		// horizontal box that filters by names and nutrients
