@@ -20,6 +20,7 @@ package application;
 /* imported JavaFX add-ons*/
 import javafx.application.Application;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -30,6 +31,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
@@ -152,8 +154,61 @@ public class Main extends Application {
 		addToMealBtn.setPrefSize(200, 20);
 		Button addNewFoodBtn = new Button(" + Add New Food");
 		addNewFoodBtn.setPrefSize(200, 20);
-		Button removeFoodBtn = new Button(" - Remove Food");
-		removeFoodBtn.setPrefSize(200, 20);
+		addNewFoodBtn.setOnAction(new EventHandler<ActionEvent>() {
+		    public void handle(ActionEvent event) {
+		        try {
+		            BorderPane foodBox = new BorderPane();
+		            foodBox.setPadding(new Insets(15, 12, 15, 12));
+		            VBox foodNutrients = new VBox();
+		            foodNutrients.setPadding(new Insets(15, 12, 15, 12));
+                    foodNutrients.setSpacing(10);
+                    TextField foodId = new TextField();
+                    foodId.setPromptText("ID of the food");
+                    TextField foodName = new TextField();
+                    foodName.setPromptText("Name of the food");
+		            TextField calorieCount = new TextField();
+		            calorieCount.setPromptText("Number of calories");
+		            TextField fatCount = new TextField();
+		            fatCount.setPromptText("Grams of fat");
+		            TextField carbCount = new TextField();
+		            carbCount.setPromptText("Grams of carbohydrates");
+		            TextField fiberCount = new TextField();
+		            fiberCount.setPromptText("Grams of fiber");
+		            TextField proteinCount = new TextField();
+		            proteinCount.setPromptText("Grams of protein");
+		            foodNutrients.getChildren().addAll(foodId, foodName, calorieCount, fatCount, carbCount, fiberCount, proteinCount);
+		            Button confirmFood = new Button("Add food");
+		            confirmFood.setMinSize(100, 27);
+		            foodBox.setLeft(foodNutrients);
+		            foodBox.setCenter(confirmFood);
+	                Scene scene = new Scene(foodBox, 300, 300);
+	                Stage stage = new Stage();
+	                stage.setTitle("Add New Food");
+	                stage.setScene(scene);
+	                stage.show();
+	                confirmFood.setOnAction(new EventHandler<ActionEvent>() {
+	                    public void handle(ActionEvent event) {
+	                        try {
+	                            FoodItem newFood = new FoodItem(foodId.getText(),foodName.getText());
+	                            newFood.addNutrient(new String("calories"), new Double(Double.parseDouble(calorieCount.getText())));
+	                            newFood.addNutrient(new String("fat"), new Double(Double.parseDouble(fatCount.getText())));
+	                            newFood.addNutrient(new String("carbohydrate"), new Double(Double.parseDouble(carbCount.getText())));
+	                            newFood.addNutrient(new String("fiber"), new Double(Double.parseDouble(fiberCount.getText())));
+	                            newFood.addNutrient(new String("protein"), new Double(Double.parseDouble(proteinCount.getText())));
+	                            foodList.add(newFood);
+	                            stage.close();
+	                        } catch (Exception e) {
+	                            e.printStackTrace();
+	                        }
+	                    }
+	                });
+		        } catch (Exception e) {
+		            e.printStackTrace();
+		        }
+		    }
+		});
+		//Button removeFoodBtn = new Button(" - Remove Food");
+		//removeFoodBtn.setPrefSize(200, 20);
 		Button loadFromFileBtn = new Button("Load from File");
 		loadFromFileBtn.setPrefSize(200, 20);
 		Button saveToFileBtn = new Button("Save to File");
