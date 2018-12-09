@@ -64,6 +64,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
 		try {
 			File csvFile = new File(filePath);
 			Scanner sc = new Scanner(csvFile);
+			foodItemList.clear();
 			while (sc.hasNextLine()) {
 				// Boolean which is changed to false if something is wrong with the format of
 				// the current line
@@ -241,4 +242,5 @@ public class FoodData implements FoodDataADT<FoodItem> {
 			e.printStackTrace();
 		}
 	}
+
 }
