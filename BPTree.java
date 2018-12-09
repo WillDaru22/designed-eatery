@@ -30,19 +30,20 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
     
     // Branching factor is the number of children nodes 
     // for internal nodes of the tree
-    private static int branchingFactor;
+    private int branchingFactor;
+    private static final int DEFAULT_BRANCHINGFACTOR = 128;
     
     public BPTree() {
-    	this(branchingFactor);
+    	this(DEFAULT_BRANCHINGFACTOR);
     }
     
     /**
-     * Public constructor
+     * Public constructor for BPTree class
      * 
-     * @param branchingFactor 
+     * @param branchingFactor number of successors
      */
     public BPTree(int branchingFactor) {
-        if (branchingFactor <= 2) {
+        if (branchingFactor <= 2) { // branching factor should be greater or equal to 2
             throw new IllegalArgumentException(
                "Illegal branching factor: " + branchingFactor);
         }
@@ -74,7 +75,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
             return new ArrayList<V>();
         // TODO : Complete
         
-        return null;
+        return root.rangeSearch(key, comparator);
     }
     
     
@@ -202,7 +203,6 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
             super();
             this.keys = new ArrayList<K>();
             this.children = new ArrayList<Node>();
-            // TODO : Complete
         }
         
         /**
@@ -232,6 +232,10 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         	Node child = getChild(key);
         	child.insert(key, value);
         	if (child.isOverflow()) {
+        		Node sibling = child.split();
+        		insertChild(sibling.getFirstLeafKey(), sibling);
+        	}
+        	if (root.isOverflow()) {
         		Node sibling = split();
         		InternalNode newRoot = new InternalNode();
         		newRoot.keys.add(sibling.getFirstLeafKey());
@@ -248,7 +252,8 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          */
         Node split() {
             // TODO : Complete
-        	int depart = keySize() / 2 + 1, dest = keySize();
+        	int depart = keySize() / 2 + 1;
+        	int dest = keySize();
         	InternalNode sibling = new InternalNode();
         	sibling.keys.addAll(keys.subList(depart, dest));
         	sibling.children.addAll(children.subList(depart, dest + 1));
@@ -298,6 +303,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 		@Override
 		void merge(BPTree<K, V>.Node sibling) {
 			// TODO Auto-generated method stub
+			@SuppressWarnings("unchecked")
 			InternalNode node = (InternalNode) sibling;
 			keys.add(node.getFirstLeafKey());
 			keys.addAll(node.keys);
@@ -341,7 +347,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 		Node getLeftChild(K key) {
 			int location = Collections.binarySearch(keys, key);
 			int childIndex = location >= 0 ? location + 1 : -location - 1;
-			if (childIndex >= 0) {
+			if (childIndex > 0) {
 				return children.get(childIndex - 1);
 				
 			}
@@ -529,21 +535,28 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         Random rnd1 = new Random();
 
         // some value to add to the BPTree
-        Double[] dd = {0.0d, 0.5d, 0.2d, 0.8d};
-
+        Double[] dd = {0.0d, 0.5d, 0.2d, 0.8d, 1.1d, 1.3d, 1.5d};
+        Double[] array = {5d,1d,4d,3d,6d,7d,8d,2d,9d};
+        List<Double> list = new ArrayList<>();
+        for (int i = 0; i < 400; i++) {
+        	Double j = array[rnd1.nextInt(9)];
+        	list.add(j);
+        	bpTree.insert(j, j);
+        	System.out.println("\n\nTree structure:\n" + bpTree.toString());
+        }
         // build an ArrayList of those value and add to BPTree also
         // allows for comparing the contents of the ArrayList 
         // against the contents and functionality of the BPTree
         // does not ensure BPTree is implemented correctly
         // just that it functions as a data structure with
         // insert, rangeSearch, and toString() working.
-        List<Double> list = new ArrayList<>();
-        for (int i = 0; i < 400; i++) {
-            Double j = dd[rnd1.nextInt(4)];
-            list.add(j);
-            bpTree.insert(j, j);
-            System.out.println("\n\nTree structure:\n" + bpTree.toString());
-        }
+//        List<Double> list = new ArrayList<>();
+//        for (int i = 0; i < 400; i++) {
+//            Double j = dd[rnd1.nextInt(7)];
+//            list.add(j);
+//            bpTree.insert(j, j);
+//            System.out.println("\n\nTree structure:\n" + bpTree.toString());
+//        }
         List<Double> filteredValues = bpTree.rangeSearch(0.2d, ">=");
         System.out.println("Filtered values: " + filteredValues.toString());
     }
