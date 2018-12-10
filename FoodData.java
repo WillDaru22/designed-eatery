@@ -65,6 +65,11 @@ public class FoodData implements FoodDataADT<FoodItem> {
 			File csvFile = new File(filePath);
 			Scanner sc = new Scanner(csvFile);
 			foodItemList.clear();
+			indexes.replace("calories", new BPTree<Double, FoodItem>());
+			indexes.replace("fat", new BPTree<Double, FoodItem>());
+			indexes.replace("carbohydrate", new BPTree<Double, FoodItem>());
+			indexes.replace("fiber", new BPTree<Double, FoodItem>());
+			indexes.replace("protein", new BPTree<Double, FoodItem>());
 			while (sc.hasNextLine()) {
 				// Boolean which is changed to false if something is wrong with the format of
 				// the current line
@@ -87,8 +92,8 @@ public class FoodData implements FoodDataADT<FoodItem> {
 					FoodItem newFood = new FoodItem(row[0], row[1]);
 					for (int i = 2; i < 12; i += 2) {
 						newFood.addNutrient(row[i].toLowerCase(), Double.parseDouble(row[i + 1]));
-						BPTree bptreeCopy = indexes.get(row[i].toLowerCase());
-						bptreeCopy.insert(row[i + 1], newFood);
+						BPTree<Double, FoodItem> bptreeCopy = indexes.get(row[i].toLowerCase());
+						bptreeCopy.insert(Double.parseDouble(row[i + 1]), newFood);
 						indexes.replace(row[i].toLowerCase(), bptreeCopy);
 					}
 					foodItemList.add(newFood);
@@ -101,7 +106,6 @@ public class FoodData implements FoodDataADT<FoodItem> {
 			e.printStackTrace();
 		} catch (Exception e) {
 			// TODO: Display message on GUI
-			e.printStackTrace();
 		}
 	}
 
@@ -201,6 +205,21 @@ public class FoodData implements FoodDataADT<FoodItem> {
 	@Override
 	public void addFoodItem(FoodItem foodItem) {
 		foodItemList.add(foodItem);
+		BPTree<Double, FoodItem> calorieBPTree = indexes.get("calories");
+		calorieBPTree.insert(foodItem.getNutrientValue("calories"), foodItem);
+		indexes.put("calories", calorieBPTree);
+		BPTree<Double, FoodItem> fatBPTree = indexes.get("fat");
+		fatBPTree.insert(foodItem.getNutrientValue("fat"), foodItem);
+		indexes.put("fat", fatBPTree);
+		BPTree<Double, FoodItem> carbBPTree = indexes.get("carbohydrate");
+		carbBPTree.insert(foodItem.getNutrientValue("carbohydrate"), foodItem);
+		indexes.put("carbohydrate", carbBPTree);
+		BPTree<Double, FoodItem> fiberBPTree = indexes.get("fiber");
+		fiberBPTree.insert(foodItem.getNutrientValue("fiber"), foodItem);
+		indexes.put("fiber", fiberBPTree);
+		BPTree<Double, FoodItem> proteinBPTree = indexes.get("protein");
+		proteinBPTree.insert(foodItem.getNutrientValue("protein"), foodItem);
+		indexes.put("protein", proteinBPTree);
 		sortFoodItemList();
 	}
 
