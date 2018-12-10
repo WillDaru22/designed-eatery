@@ -19,6 +19,8 @@ package application;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 
 /* imported JavaFX add-ons*/
 import javafx.application.Application;
@@ -35,6 +37,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -51,16 +54,18 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
 	private ArrayList<FoodItem> foodItemList; // List which stores the FoodItem objects in the "All Foods" list
-	private ArrayList<String> foodNameList; // List which stores the names of the FoodItem objects in the "All Foods"
-											// list
-	private ObservableList<String> foodNames; // An observable list of the food names. When this list is updated the GUI
-												// will update to show changes
-	private ObservableList<String> foodInMealNames; // An observable list of the food in meal names. When this list is
-													// updated the GUI will update to show changes
-	private ObservableList<String> nutritionInEachFood; // An observable list of the nutrition in the selected food.
-														// When this list is updated the GUI will update to show changes
-	private ObservableList<String> totalNutrition; // An observable list of the nutrition in the whole meal. When this
-													// list is updated the GUI will update to show changes
+	private ObservableList<String> foodNameObservable; // An observable list of the food names. When this list is
+														// updated the GUI will update to show changes
+	private ArrayList<FoodItem> foodInMealList; // List which stores the FoodItem objects in the "Current Meal" list
+	private ObservableList<String> foodInMealObservable; // An observable list of the food in meal names. When this list
+															// is updated the GUI will update to show changes
+	private ObservableList<String> nutritionInEachFoodObservable; // An observable list of the nutrition in the selected
+																	// food. When this list is updated the GUI will
+																	// update to show changes
+	private ObservableList<String> totalNutritionObservable; // An observable list of the nutrition in the whole meal.
+																// When this list is updated the GUI will update to show
+																// changes
+	private Label foodCount; // Label which shows the number of foods displayed in the "All Foods" list
 
 	/*
 	 * Creates the GUI and responds to user input.
@@ -79,21 +84,36 @@ public class Main extends Application {
 
 		// Sets up the "All Foods" list
 		foodItemList = (ArrayList<FoodItem>) foodData.getAllFoodItems();
-		foodNameList = new ArrayList<String>();
+		foodNameObservable = FXCollections.observableArrayList(new ArrayList<String>());
 		for (int i = 0; i < foodItemList.size(); i++)
-			foodNameList.add(foodItemList.get(i).getName());
-		foodNames = FXCollections.observableArrayList(foodNameList);
-		ListView<String> listOfFoods = new ListView<String>(foodNames);
+			foodNameObservable.add(foodItemList.get(i).getName());
+		ListView<String> listOfFoods = new ListView<String>(foodNameObservable);
 		listOfFoods.setMaxWidth(300);
 		listOfFoods.setMinWidth(300);
-		listOfFoods.setMaxHeight(200);
-		listOfFoods.setMinHeight(200);
+		listOfFoods.setMaxHeight(170);
+		listOfFoods.setMinHeight(170);
+		
+		// Counter which displays the number of foods in the current food list view
+		Label foodCounterLbl = new Label("   Number of foods: ");
+		foodCounterLbl.setFont(Font.font("Abel", FontWeight.NORMAL, 15));
+		foodCount = new Label(Integer.toString(foodNameObservable.size()));
+		foodCount.setFont(Font.font("Abel", FontWeight.NORMAL, 15));
+		
+		// Sets up the food in meal list
+		foodInMealList = new ArrayList<FoodItem>();
+		foodInMealObservable = FXCollections.observableArrayList(new ArrayList<String>());
+		ListView<String> listOfFoodsInMeal = new ListView<String>(foodInMealObservable);
+		listOfFoodsInMeal.setMaxWidth(300);
+		listOfFoodsInMeal.setMinWidth(300);
+		listOfFoodsInMeal.setMaxHeight(391);
+		listOfFoodsInMeal.setMinHeight(391);
 
 		// Displays the filter label
 		Label filterLbl = new Label("   Filter by: ");
 		filterLbl.setFont(Font.font("Abel", FontWeight.NORMAL, 20));
 
 		// Button to filter by name
+		// TODO: Implement: update the list of all foods when the filter is typed in
 		Button nameFilter = new Button("Name");
 		nameFilter.setFont(Font.font("Abel", FontWeight.NORMAL, 15));
 		nameFilter.setMinWidth(75);
@@ -171,12 +191,30 @@ public class Main extends Application {
 		});
 
 		// Button to add the selected food from the foods list to the meal list
-		// TODO: Implement: when the user selects the food from the list and clicks this
-		// button, the food in meal list button will contain that food
 		Button addToMealBtn = new Button("Add to Meal");
 		addToMealBtn.setFont(Font.font("Abel", FontWeight.NORMAL, 15));
 		addToMealBtn.setMaxSize(300, 38);
 		addToMealBtn.setMinSize(300, 38);
+		addToMealBtn.setOnAction(new EventHandler<ActionEvent>() {
+			/*
+			 * Handles clicking the "Add to Meal" button
+			 */
+			public void handle(ActionEvent event) {
+				try {
+					int index = listOfFoods.getSelectionModel().getSelectedIndex();
+					if (index >= 0) {
+						FoodItem selectedFood = foodItemList.get(index);
+						foodInMealList.add(selectedFood);
+						sortFoodInMealList();
+						foodInMealObservable.clear();
+						for (int i = 0; i < foodInMealList.size(); i++)
+							foodInMealObservable.add(foodInMealList.get(i).getName());
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 
 		// Button to add a new food to the foods list
 		Button addNewFoodBtn = new Button(" + Add New Food");
@@ -214,12 +252,15 @@ public class Main extends Application {
 					confirmFood.setMinSize(100, 27);
 					foodBox.setLeft(foodNutrients);
 					foodBox.setCenter(confirmFood);
-					Scene scene = new Scene(foodBox, 300, 300);
+					Scene scene = new Scene(foodBox, 340, 300);
 					Stage stage = new Stage();
 					stage.setTitle("Add New Food");
 					stage.setScene(scene);
 					stage.show();
 					confirmFood.setOnAction(new EventHandler<ActionEvent>() {
+						/*
+						 * Handles clicking on the "Add food" confirmation button
+						 */
 						public void handle(ActionEvent event) {
 							try {
 								FoodItem newFood = new FoodItem(foodId.getText(), foodName.getText());
@@ -236,12 +277,10 @@ public class Main extends Application {
 								foodData.addFoodItem(newFood);
 								foodItemList.clear();
 								foodItemList = (ArrayList<FoodItem>) foodData.getAllFoodItems();
-								foodNames.setAll(FXCollections.observableArrayList(foodNameList));
-								foodNameList.clear();
+								foodNameObservable.clear();
 								for (int i = 0; i < foodItemList.size(); i++)
-									foodNameList.add(foodItemList.get(i).getName());
-								foodNames.clear();
-								foodNames.setAll(FXCollections.observableArrayList(foodNameList));
+									foodNameObservable.add(foodItemList.get(i).getName());
+								foodCount.setText(Integer.toString(foodNameObservable.size()));
 								stage.close();
 							} catch (Exception e) {
 								e.printStackTrace();
@@ -271,13 +310,11 @@ public class Main extends Application {
 					foodData.loadFoodItems(selectedFile.getPath());
 					foodItemList.clear();
 					foodItemList = (ArrayList<FoodItem>) foodData.getAllFoodItems();
-					foodNameList.clear();
+					foodNameObservable.clear();
 					for (int i = 0; i < foodItemList.size(); i++)
-						foodNameList.add(foodItemList.get(i).getName());
-					foodNames.clear();
-					foodNames.setAll(FXCollections.observableArrayList(foodNameList));
+						foodNameObservable.add(foodItemList.get(i).getName());
+					foodCount.setText(Integer.toString(foodNameObservable.size()));
 				} catch (Exception e) {
-					e.printStackTrace();
 				}
 			}
 		});
@@ -322,22 +359,30 @@ public class Main extends Application {
 		Text currentMealLbl = new Text("                             Current Meal");
 		currentMealLbl.setFont(Font.font("Abel", FontWeight.EXTRA_BOLD, 28));
 
-		// Sets up the food in meal list
-		// TODO: Implement: update when a food is added or removed from the list
-		foodInMealNames = FXCollections.observableArrayList("Asparagus", "Cranberries", "Gravy", "Green beans",
-				"Mashed potatoes", "Turkey");
-		ListView<String> listOfFoodsInMeal = new ListView<String>(foodInMealNames);
-		listOfFoodsInMeal.setMaxWidth(300);
-		listOfFoodsInMeal.setMinWidth(300);
-		listOfFoodsInMeal.setMaxHeight(391);
-		listOfFoodsInMeal.setMinHeight(391);
-
 		// Button which removes the selected food from the food in meal list
-		// TODO: Implement: when a food is selected from the food in meal list and this
-		// button is clicked, remove the food from the list
 		Button removeFoodFromMealBtn = new Button(" - Remove from Meal");
 		removeFoodFromMealBtn.setPrefSize(300, 38);
 		removeFoodFromMealBtn.setFont(Font.font("Abel", FontWeight.NORMAL, 15));
+		removeFoodFromMealBtn.setOnAction(new EventHandler<ActionEvent>() {
+			/*
+			 * Handles clicking the "Remove from Meal" button
+			 */
+			public void handle(ActionEvent event) {
+				try {
+					int index = listOfFoodsInMeal.getSelectionModel().getSelectedIndex();
+					if (index >= 0) {
+						FoodItem selectedFood = foodInMealList.get(index);
+						foodInMealList.remove(selectedFood);
+						sortFoodInMealList();
+						foodInMealObservable.clear();
+						for (int i = 0; i < foodInMealList.size(); i++)
+							foodInMealObservable.add(foodInMealList.get(i).getName());
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 
 		// Displays the "Nutrition for:" label
 		Label nutritionLbl = new Label("Nutrition for: ");
@@ -347,14 +392,15 @@ public class Main extends Application {
 		// TODO: Implement: when a food is selected from the food in meal list the name
 		// of the food will be displayed
 		Label foodNutritionLbl = new Label("Asparagus");
-		foodNutritionLbl.setFont(Font.font("Abel", FontWeight.NORMAL, 20));
+		foodNutritionLbl.setFont(Font.font("Abel", FontWeight.BOLD, 20));
+		foodNutritionLbl.setTextFill(Color.SLATEGREY);
 
 		// Sets up the nutrition in selected food list
 		// TODO: Implement: when a food is selected from the food in meal list the
 		// nutrition for that food will display here
-		ObservableList<String> nutritionInEachFood = FXCollections.observableArrayList("Calories: 20", "Fat: 0",
-				"Carbohydrates: 4", "Fiber: 2", "Protein: 60");
-		ListView<String> nutritionList = new ListView<String>(nutritionInEachFood);
+		nutritionInEachFoodObservable = FXCollections.observableArrayList("Calories: 20", "Fat: 0", "Carbohydrates: 4",
+				"Fiber: 2", "Protein: 60");
+		ListView<String> nutritionList = new ListView<String>(nutritionInEachFoodObservable);
 		nutritionList.setMaxWidth(320);
 		nutritionList.setMinWidth(320);
 		nutritionList.setMaxHeight(128);
@@ -371,9 +417,9 @@ public class Main extends Application {
 		// TODO: Implement: either update when the user clicks on the "Total Nutrition"
 		// button or update automatically when the user adds a new food to the food in
 		// meal list
-		totalNutrition = FXCollections.observableArrayList("Calories: 2500", "Fat: 300", "Carbohydrates: 200",
+		totalNutritionObservable = FXCollections.observableArrayList("Calories: 2500", "Fat: 300", "Carbohydrates: 200",
 				"Fiber: 30", "Protein: 60");
-		ListView<String> totalNutritionList = new ListView<String>(totalNutrition);
+		ListView<String> totalNutritionList = new ListView<String>(totalNutritionObservable);
 		totalNutritionList.setMaxWidth(320);
 		totalNutritionList.setMinWidth(320);
 		totalNutritionList.setMaxHeight(128);
@@ -383,13 +429,18 @@ public class Main extends Application {
 		HBox filterHbox = new HBox();
 		filterHbox.setSpacing(10);
 		filterHbox.getChildren().addAll(filterLbl, nameFilter, nutrientFilter);
+		
+		// Horizontal box to hold the counter label and value
+		HBox foodCounterHbox = new HBox();
+		foodCounterHbox.setSpacing(10);
+		foodCounterHbox.getChildren().addAll(foodCounterLbl, foodCount);
 
 		// Vertical box for the left side of the application
 		VBox vbox1 = new VBox();
 		vbox1.setMaxWidth(300);
 		vbox1.setMinWidth(300);
 		vbox1.setSpacing(12);
-		vbox1.getChildren().addAll(foodLbl, filterHbox, listOfFoods, addToMealBtn, addNewFoodBtn, loadFromFileBtn,
+		vbox1.getChildren().addAll(foodLbl, filterHbox, listOfFoods, foodCounterHbox, addToMealBtn, addNewFoodBtn, loadFromFileBtn,
 				saveToFileBtn);
 
 		// Line which divides the "All Foods" section from the "Current Meal" section
@@ -436,6 +487,29 @@ public class Main extends Application {
 		primaryStage.show();
 	}
 
+	/**
+	 * Private helper method which sorts the FoodInMealList alphanumerically.
+	 */
+	private void sortFoodInMealList() {
+		HashMap<String, FoodItem> nameToItemMap = new HashMap<String, FoodItem>();
+		ArrayList<String> foodNameList = new ArrayList<String>();
+		ArrayList<FoodItem> newFoodItemList = new ArrayList<FoodItem>();
+		for (int i = 0; i < foodInMealList.size(); i++) {
+			foodNameList.add(foodInMealList.get(i).getName());
+			nameToItemMap.put(foodInMealList.get(i).getName(), foodInMealList.get(i));
+		}
+		Collections.sort(foodNameList);
+		for (int i = 0; i < foodNameList.size(); i++)
+			newFoodItemList.add(nameToItemMap.get(foodNameList.get(i)));
+		foodInMealList = newFoodItemList;
+	}
+
+	/**
+	 * Main method, launches the program.
+	 * 
+	 * @param args
+	 *            are the arguments
+	 */
 	public static void main(String[] args) {
 		launch(args);
 	}
