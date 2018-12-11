@@ -137,12 +137,27 @@ public class Main extends Application {
 					stage.setTitle("Filter By Name");
 					stage.setScene(scene);
 					stage.show();
-					confirmName.setOnAction(ActionEvent -> stage.close());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+					confirmName.setOnAction(new EventHandler<ActionEvent>() {
+					    /*
+					     * Handles clicking on the "Name" confirmation button
+					     */
+					    @Override
+					    public void handle(ActionEvent event) {
+					      try {
+						FoodData name = new FoodData();
+						TextField input = new TextField();
+						name.filterByName(input.getText());
+						stage.close();
+					      } catch (Exception e) {
+						e.printStackTrace();
+					      }
+					    }
+					  });
+					} catch (Exception e) {
+					  e.printStackTrace();
+					}
+				      }
+				    });
 
 		// Button to filter by nutrition contents
 		// TODO: Implement: update the list of all foods when the filter is typed in
@@ -183,12 +198,29 @@ public class Main extends Application {
 					stage.setTitle("Filter By Nutrient");
 					stage.setScene(scene);
 					stage.show();
-					confirmNutrient.setOnAction(ActionEvent -> stage.close());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+					confirmNutrient.setOnAction(new EventHandler<ActionEvent>() {
+					    /*
+					     * Handles clicking on the "Nutrients" confirmation button
+					     */
+					    @SuppressWarnings("unchecked")
+					    @Override
+					    public void handle(ActionEvent event) {
+					      try {
+						FoodData name = new FoodData();
+						TextField input = new TextField();
+						List<String> inputList = (List<String>) input; 
+						name.filterByNutrients(inputList);
+						stage.close();
+					      } catch (Exception e) {
+						e.printStackTrace();
+					      }
+					    }
+					  });
+					} catch (Exception e) {
+					  e.printStackTrace();
+					}
+				      }
+				    });
 
 		// Button to add the selected food from the foods list to the meal list
 		Button addToMealBtn = new Button("Add to Meal");
