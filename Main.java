@@ -87,6 +87,7 @@ public class Main extends Application {
   public void start(Stage primaryStage) {
     // Creates a new FoodData object
     FoodData foodData = new FoodData();
+    
 
     // Displays title
     primaryStage.setTitle("Food Query and Meal Analysis");
@@ -257,7 +258,7 @@ public class Main extends Application {
           if (index >= 0) {
             FoodItem selectedFood = foodItemList.get(index);
             foodInMealList.add(selectedFood);
-            sortFoodInMealList();
+            foodInMealList = sortFoodItemListByName(foodInMealList);
             foodInMealObservable.clear();
             for (int i = 0; i < foodInMealList.size(); i++)
               foodInMealObservable.add(foodInMealList.get(i).getName());
@@ -334,7 +335,7 @@ public class Main extends Application {
                   foodNameObservable.add(foodItemList.get(i).getName());
                 foodCount.setText(Integer.toString(foodNameObservable.size()));
                 stage.close();
-	      } catch (NumberFormatException ef) {
+              } catch (NumberFormatException ef) {
                   //Runs only if invalid input
                   try {
                       //Displays an error box to notify the user than an error of invalid input has occured
@@ -447,7 +448,7 @@ public class Main extends Application {
           if (index >= 0) {
             FoodItem selectedFood = foodInMealList.get(index);
             foodInMealList.remove(selectedFood);
-            sortFoodInMealList();
+            foodInMealList = sortFoodItemListByName(foodInMealList);
             foodInMealObservable.clear();
             for (int i = 0; i < foodInMealList.size(); i++)
               foodInMealObservable.add(foodInMealList.get(i).getName());
@@ -575,22 +576,23 @@ public class Main extends Application {
     primaryStage.setScene(new Scene(hbox, 1000, 500));
     primaryStage.show();
   }
-	/**
-	 * Private helper method which sorts a FoodItem list alphanumerically.
-	 */
-	private ArrayList<FoodItem> sortFoodItemListByName(ArrayList<FoodItem> foodItemList) {
-		HashMap<String, FoodItem> nameToItemMap = new HashMap<String, FoodItem>();
-		ArrayList<String> foodNameList = new ArrayList<String>();
-		ArrayList<FoodItem> newFoodItemList = new ArrayList<FoodItem>();
-		for (int i = 0; i < foodItemList.size(); i++) {
-			foodNameList.add(foodItemList.get(i).getName());
-			nameToItemMap.put(foodItemList.get(i).getName(), foodItemList.get(i));
-		}
-		Collections.sort(foodNameList);
-		for (int i = 0; i < foodNameList.size(); i++)
-			newFoodItemList.add(nameToItemMap.get(foodNameList.get(i)));
-		return newFoodItemList;
-	}
+
+  /**
+   * Private helper method which sorts the FoodInMealList alphanumerically.
+   */
+  private ArrayList<FoodItem> sortFoodItemListByName(ArrayList<FoodItem> foodItemList) {
+      HashMap<String, FoodItem> nameToItemMap = new HashMap<String, FoodItem>();
+      ArrayList<String> foodNameList = new ArrayList<String>();
+      ArrayList<FoodItem> newFoodItemList = new ArrayList<FoodItem>();
+      for (int i = 0; i < foodItemList.size(); i++) {
+          foodNameList.add(foodItemList.get(i).getName());
+          nameToItemMap.put(foodItemList.get(i).getName(), foodItemList.get(i));
+      }
+      Collections.sort(foodNameList);
+      for (int i = 0; i < foodNameList.size(); i++)
+          newFoodItemList.add(nameToItemMap.get(foodNameList.get(i)));
+      return newFoodItemList;
+  }
 
   /**
    * Main method, launches the program.
