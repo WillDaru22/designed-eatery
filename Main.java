@@ -407,6 +407,7 @@ public class Main extends Application {
 										new Double(Double.parseDouble(proteinCount.getText())));
 								foodData.addFoodItem(newFood);
 								foodItemList.add(newFood);
+								foodItemList = sortFoodItemListByName(foodItemList);
 								foodNameObservable.clear();
 								for (int i = 0; i < foodItemList.size(); i++)
 									foodNameObservable.add(foodItemList.get(i).getName());
@@ -687,7 +688,7 @@ public class Main extends Application {
 			foodNameList.add(foodItemList.get(i).getName());
 			nameToItemMap.put(foodItemList.get(i).getName(), foodItemList.get(i));
 		}
-		Collections.sort(foodNameList);
+		Collections.sort(foodNameList, String.CASE_INSENSITIVE_ORDER);
 		for (int i = 0; i < foodNameList.size(); i++)
 			newFoodItemList.add(nameToItemMap.get(foodNameList.get(i)));
 		return newFoodItemList;
