@@ -17,7 +17,7 @@ public class FoodItem {
     private String id;
 
     // Map of nutrients and value.
-    private HashMap<String, Double> nutrients;
+    private HashMap<String, Double>();
     
     /**
      * Constructor
