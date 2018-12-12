@@ -462,8 +462,23 @@ public class Main extends Application {
     // TODO: Implement: either update when the user clicks on the "Total Nutrition"
     // button or update automatically when the user adds a new food to the food in
     // meal list
-    totalNutritionObservable = FXCollections.observableArrayList("Calories: 2500", "Fat: 300",
-        "Carbohydrates: 200", "Fiber: 30", "Protein: 60");
+
+    Double totCal = 0.0;
+		Double totCarbs = 0.0;
+		Double totFat = 0.0;
+		Double totPro = 0.0;
+		Double totFib = 0.0;
+		for (FoodItem i : foodItemList) {
+			totCal = i.getNutrientValue("calories");
+			totCarbs = i.getNutrientValue("carbohydrate");
+			totFat = i.getNutrientValue("fat");
+			totPro = i.getNutrientValue("protein");
+			totFib = i.getNutrientValue("fiber");
+		}
+
+		totalNutritionObservable = FXCollections.observableArrayList("Calories: " + totCal, "Fat: " + totFat,
+				"Carbohydrates: " + totCarbs, "Fiber: " + totFib, "Protein: " + totPro);
+
     ListView<String> totalNutritionList = new ListView<String>(totalNutritionObservable);
     totalNutritionList.setMaxWidth(320);
     totalNutritionList.setMinWidth(320);
