@@ -179,20 +179,26 @@ public class FoodData implements FoodDataADT<FoodItem> {
      * @param rules list of rules
      * @return list of filtered food items; if no food item matched, return empty list
      */
-	@Override
-	public List<FoodItem> filterByNutrients(List<String> rules) {
-		List<List<FoodItem>> filter = rules.stream().map(filterRule -> filterRule.split(" "))
-				.map(rule -> this.indexes.get(rule[0]).rangeSearch(Double.parseDouble(rule[2]), rule[1]))
-				.collect(Collectors.toList());
-		if (filter.size() > 0) {
-			filter.forEach(list -> filter.get(0).retainAll(list));
-			List<FoodItem> filteredItem = filter.get(0);
-			return filteredItem;
-		} else {
-			List<FoodItem> emptyList = new ArrayList<FoodItem>();
-			return emptyList;
-		}
-	}
+  @Override
+  public List<FoodItem> filterByNutrients(List<String> rules) {
+    String ruleArray[] = rules.get(0).split(" "); // split array into individual strings
+    List<FoodItem> filterList1 =
+        indexes.get(ruleArray[0]).rangeSearch(Double.parseDouble(ruleArray[1]), ruleArray[2]);
+    List<FoodItem> filterList2 = new ArrayList<FoodItem>();
+
+    for (int i = 1; i < rules.size(); i++) {
+      ruleArray = rules.get(i).split(" ");
+      filterList2 =
+          indexes.get(ruleArray[0]).rangeSearch(Double.parseDouble(ruleArray[1]), ruleArray[2]);
+      for (int j = 0; j < filterList1.size(); j++) {
+        if (!(filterList2.contains(filterList1.get(j)))) {
+          filterList1.remove(j);
+          j = j - 1;
+        }
+      }
+    }
+    return filterList1;
+  }
 
 	/**
      * Adds a food item to the loaded data.
