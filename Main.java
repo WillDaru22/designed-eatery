@@ -155,9 +155,12 @@ public class Main extends Application {
             @Override
             public void handle(ActionEvent event) {
               try {
-                FoodData name = new FoodData();
-                TextField input = new TextField();
-                name.filterByName(input.getText());
+                List<FoodItem> filteredList = new ArrayList<FoodItem>();
+                filteredList = foodData.filterByName(nameFilterField.getText());
+                foodNameObservable.clear();
+                for (int i = 0; i < filteredList.size(); i++)
+                  foodNameObservable.add(filteredList.get(i).getName());
+                sortFoodInMealList();
                 stage.close();
               } catch (Exception e) {
                 e.printStackTrace();
