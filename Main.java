@@ -230,8 +230,8 @@ public class Main extends Application {
 						@Override
 						public void handle(ActionEvent event) {
 							try {
-								String rule = new String(nutrientName.getText() + ",");
-								rule = rule + comparator.getText() + "," + nutrientValue.getText();
+								String rule = new String(nutrientName.getText() + " ");
+								rule = rule + comparator.getText() + " " + nutrientValue.getText();
 							 	nutrientFilterRules.add(rule);
 								stage.close();
 							} catch (Exception e) {
