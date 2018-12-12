@@ -510,30 +510,24 @@ public class Main extends Application {
 		// TODO: Change to button if we want the user to manually compute the total
 		// nutrition or keep the label if we want it to update every time a food is
 		// added to the food in meal list
-		Label totalNutritionLbl = new Label("Total Nutrition");
+	Button totalNutritionBtn = new Button("Total Nutrition");
+		totalNutritionBtn.setFont(Font.font("Abel", FontWeight.NORMAL, 15));
+		totalNutritionBtn.setPrefSize(300, 38);
+		totalNutritionBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+			public void handle(ActionEvent event) {
+				calculateTotal();
+			}
+		});	
+	  Label totalNutritionLbl = new Label("Total Nutrition");
 		totalNutritionLbl.setFont(Font.font("Abel", FontWeight.NORMAL, 15));
 	  
     // Sets up the total nutrition list
     // TODO: Implement: either update when the user clicks on the "Total Nutrition"
     // button or update automatically when the user adds a new food to the food in
     // meal list
-
-    Double totCal = 0.0;
-		Double totCarbs = 0.0;
-		Double totFat = 0.0;
-		Double totPro = 0.0;
-		Double totFib = 0.0;
-		for (FoodItem i : foodItemList) {
-			totCal = i.getNutrientValue("calories");
-			totCarbs = i.getNutrientValue("carbohydrate");
-			totFat = i.getNutrientValue("fat");
-			totPro = i.getNutrientValue("protein");
-			totFib = i.getNutrientValue("fiber");
-		}
-
-		totalNutritionObservable = FXCollections.observableArrayList("Calories: " + totCal, "Fat: " + totFat,
-				"Carbohydrates: " + totCarbs, "Fiber: " + totFib, "Protein: " + totPro);
-
+totalNutritionObservable = FXCollections.observableArrayList("Calories: " + 0.0, "Fat: " + 0.0,
+				"Carbohydrates: " + 0.0, "Fiber: " + 0.0, "Protein: " + 0.0);
     ListView<String> totalNutritionList = new ListView<String>(totalNutritionObservable);
     totalNutritionList.setMaxWidth(320);
     totalNutritionList.setMinWidth(320);
@@ -578,7 +572,7 @@ public class Main extends Application {
     nutritionVbox.setSpacing(16);
     nutritionVbox.setMaxWidth(300);
     nutritionVbox.getChildren().addAll(nutritionLbl, foodNutritionLbl, nutritionList,
-        totalNutritionLbl, totalNutritionList);
+        totalNutritionLbl, totalNutritionList, totalNutritionBtn);
 
     // Horizontal box which contains the two vertical boxes which make up the
     // "Current Meal" section
@@ -618,6 +612,26 @@ public class Main extends Application {
           newFoodItemList.add(nameToItemMap.get(foodNameList.get(i)));
       return newFoodItemList;
   }
+  private void calculateTotal() {
+
+		Double totCal = 0.0;
+		Double totCarbs = 0.0;
+		Double totFat = 0.0;
+		Double totPro = 0.0;
+		Double totFib = 0.0;
+		for (FoodItem i : foodItemList) {
+			totCal += i.getNutrientValue("calories");
+			totCarbs += i.getNutrientValue("carbohydrate");
+			totFat += i.getNutrientValue("fat");
+			totPro += i.getNutrientValue("protein");
+			totFib += i.getNutrientValue("fiber");
+		}
+
+		totalNutritionObservable.clear();
+		totalNutritionObservable.addAll("Calories: " + totCal, "Fat: " + totFat, "Carbohydrates: " + totCarbs,
+				"Fiber: " + totFib, "Protein: " + totPro);
+
+	}
 
   /**
    * Main method, launches the program.
