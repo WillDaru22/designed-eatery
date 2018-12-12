@@ -464,6 +464,26 @@ public class Main extends Application {
 					fileChooser.getExtensionFilters().add(csvFilter);
 					fileChooser.setTitle("Open food data file");
 					File selectedFile = fileChooser.showOpenDialog(primaryStage);
+					if (selectedFile.getPath()
+							.substring(selectedFile.getPath().length() - 4, selectedFile.getPath().length())
+							.toLowerCase().equals(".csv") == false) {
+						BorderPane errorBox = new BorderPane();
+						errorBox.setPadding(new Insets(15, 12, 15, 12));
+						Label errorLabel = new Label("  Error: File must be a .csv file.");
+						errorLabel.setFont(Font.font("Abel", FontWeight.EXTRA_BOLD, 15));
+						Button errorButton = new Button("Ok");
+						errorButton.setMaxSize(100, 27);
+						errorButton.setMinSize(100, 27);
+						errorBox.setTop(errorLabel);
+						errorBox.setCenter(errorButton);
+						Scene errorScene = new Scene(errorBox, 250, 100);
+						Stage errorStage = new Stage();
+						errorStage.setTitle("Error");
+						errorStage.setScene(errorScene);
+						errorStage.show();
+						errorButton.setOnAction(ActionEvent -> errorStage.close());
+						return;
+					}
 					foodData.loadFoodItems(selectedFile.getPath());
 					foodItemList.clear();
 					foodItemList = (ArrayList<FoodItem>) foodData.getAllFoodItems();
@@ -493,18 +513,20 @@ public class Main extends Application {
 					Label outputFileNameLbl = new Label("Name of output file");
 					outputFileNameLbl.setFont(Font.font("Abel", FontWeight.NORMAL, 15));
 					TextField inputField = new TextField();
+					Label csvEnding = new Label(".csv");
+					csvEnding.setFont(Font.font("Abel", FontWeight.NORMAL, 15));
 					Button confirmSaveBtn = new Button("Save");
 					confirmSaveBtn.setFont(Font.font("Abel", FontWeight.NORMAL, 13));
 					confirmSaveBtn.setMinSize(100, 27);
-					saveFileHbox.getChildren().addAll(outputFileNameLbl, inputField, confirmSaveBtn);
-					Scene scene = new Scene(saveFileHbox, 450, 50);
+					saveFileHbox.getChildren().addAll(outputFileNameLbl, inputField, csvEnding, confirmSaveBtn);
+					Scene scene = new Scene(saveFileHbox, 500, 50);
 					Stage stage = new Stage();
 					stage.setTitle("Save to file");
 					stage.setScene(scene);
 					stage.show();
 					confirmSaveBtn.setOnAction(ActionEvent -> {
 						stage.close();
-						foodData.saveFoodItems(inputField.getText());
+						foodData.saveFoodItems(inputField.getText() + ".csv");
 					});
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -599,7 +621,7 @@ public class Main extends Application {
 		totalNutritionList.setMinWidth(320);
 		totalNutritionList.setMaxHeight(128);
 		totalNutritionList.setMinHeight(128);
-		
+
 		// Button calculate the total nutrition of the foods in the meal list
 		Button totalNutritionBtn = new Button("Calculate Total Nutrition");
 		totalNutritionBtn.setFont(Font.font("Abel", FontWeight.NORMAL, 15));
@@ -608,7 +630,7 @@ public class Main extends Application {
 		totalNutritionBtn.setMaxHeight(38);
 		totalNutritionBtn.setMinHeight(38);
 		totalNutritionBtn.setOnAction(new EventHandler<ActionEvent>() {
-			/* 
+			/*
 			 * Handles clicking the "Calculate Total Nutrition" button
 			 */
 			public void handle(ActionEvent event) {
