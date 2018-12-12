@@ -555,8 +555,6 @@ public class Main extends Application {
 		nutritionList.setMinHeight(128);
 
 		// Displays the selected food from the food in meal list
-		// TODO: Implement: when a food is selected from the food in meal list the name
-		// of the food will be displayed
 		Label foodNutritionLbl = new Label();
 		listOfFoodsInMeal.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			/*
@@ -582,7 +580,7 @@ public class Main extends Application {
 				}
 			}
 		});
-		foodNutritionLbl.setFont(Font.font("Abel", FontWeight.BOLD, 20));
+		foodNutritionLbl.setFont(Font.font("Abel", FontWeight.BOLD, 18));
 		foodNutritionLbl.setTextFill(Color.SLATEGREY);
 
 		// Displays the "Total Nutrition" label
