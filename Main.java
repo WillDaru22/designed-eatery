@@ -406,6 +406,15 @@ public class Main extends Application {
 								newFood.addNutrient(new String("protein"),
 										new Double(Double.parseDouble(proteinCount.getText())));
 								foodData.addFoodItem(newFood);
+								if(foodItemList.size() == (foodData.getAllFoodItems().size())) {
+	                                				foodNameObservable.clear();
+	                                				for (int i = 0; i < foodItemList.size(); i++) {
+	                                    					foodNameObservable.add(foodItemList.get(i).getName());
+									}
+	                                				foodCount.setText(Integer.toString(foodNameObservable.size()));
+	                                				stage.close();
+	                               	 				return;
+								}
 								foodItemList.add(newFood);
 								foodItemList = sortFoodItemListByName(foodItemList);
 								foodNameObservable.clear();
