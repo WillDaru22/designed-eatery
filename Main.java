@@ -460,6 +460,8 @@ public class Main extends Application {
 			public void handle(ActionEvent event) {
 				try {
 					FileChooser fileChooser = new FileChooser();
+					FileChooser.ExtensionFilter csvFilter = new FileChooser.ExtensionFilter("Comma Separated Values File", "*.csv");
+					fileChooser.getExtensionFilters().add(csvFilter);
 					fileChooser.setTitle("Open food data file");
 					File selectedFile = fileChooser.showOpenDialog(primaryStage);
 					foodData.loadFoodItems(selectedFile.getPath());
