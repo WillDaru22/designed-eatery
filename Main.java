@@ -35,6 +35,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -459,35 +460,59 @@ public class Main extends Application {
       }
     });
 
-    // Displays the "Nutrition for:" label
-    Label nutritionLbl = new Label("Nutrition for: ");
-    nutritionLbl.setFont(Font.font("Abel", FontWeight.NORMAL, 15));
+		// Displays the "Nutrition for:" label
+		Label nutritionLbl = new Label("Nutrition for: ");
+		nutritionLbl.setFont(Font.font("Abel", FontWeight.NORMAL, 15));
 
-    // Displays the selected food from the food in meal list
-    // TODO: Implement: when a food is selected from the food in meal list the name
-    // of the food will be displayed
-    Label foodNutritionLbl = new Label("Asparagus");
-    foodNutritionLbl.setFont(Font.font("Abel", FontWeight.BOLD, 20));
-    foodNutritionLbl.setTextFill(Color.SLATEGREY);
+		// Sets up the nutrition in selected food list
+		// TODO: Implement: when a food is selected from the food in meal list the
+		// nutrition for that food will display here
+		nutritionInEachFoodObservable = FXCollections.observableArrayList("Calories: " + 0.0, "Fat: " + 0.0,
+				"Carbohydrates: " + 0.0, "Fiber: " + 0.0, "Protein: " + 0.0);
+		ListView<String> nutritionList = new ListView<String>(nutritionInEachFoodObservable);
+		nutritionList.setMaxWidth(320);
+		nutritionList.setMinWidth(320);
+		nutritionList.setMaxHeight(128);
+		nutritionList.setMinHeight(128);
 
-    // Sets up the nutrition in selected food list
-    // TODO: Implement: when a food is selected from the food in meal list the
-    // nutrition for that food will display here
-    nutritionInEachFoodObservable = FXCollections.observableArrayList("Calories: 20", "Fat: 0",
-        "Carbohydrates: 4", "Fiber: 2", "Protein: 60");
-    ListView<String> nutritionList = new ListView<String>(nutritionInEachFoodObservable);
-    nutritionList.setMaxWidth(320);
-    nutritionList.setMinWidth(320);
-    nutritionList.setMaxHeight(128);
-    nutritionList.setMinHeight(128);
+		// Displays the selected food from the food in meal list
+		// TODO: Implement: when a food is selected from the food in meal list the name
+		// of the food will be displayed
+		Label foodNutritionLbl = new Label();
+		listOfFoodsInMeal.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			/*
+			 * Handles clicking the "Remove from Meal" button
+			 */
+			public void handle(MouseEvent event) {
+				try {
+					int index = listOfFoodsInMeal.getSelectionModel().getSelectedIndex();
+					if (index >= 0) {
+						FoodItem selectedFood = foodInMealList.get(index);
+						foodNutritionLbl.setText(selectedFood.getName());
+						Double calories = selectedFood.getNutrientValue("calories");
+						Double carbohydrate = selectedFood.getNutrientValue("carbohydrate");
+						Double fat = selectedFood.getNutrientValue("fat");
+						Double protein = selectedFood.getNutrientValue("protein");
+						Double fiber = selectedFood.getNutrientValue("fiber");
+						nutritionInEachFoodObservable.clear();
+						nutritionInEachFoodObservable.addAll("Calories: " + calories, "Fat: " + fat,
+								"Carbohydrates: " + carbohydrate, "Fiber: " + fiber, "Protein: " + protein);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		foodNutritionLbl.setFont(Font.font("Abel", FontWeight.BOLD, 20));
+		foodNutritionLbl.setTextFill(Color.SLATEGREY);
 
-    // Displays the "Total Nutrition" label
-    // TODO: Change to button if we want the user to manually compute the total
-    // nutrition or keep the label if we want it to update every time a food is
-    // added to the food in meal list
-    Label totalNutritionLbl = new Label("Total Nutrition");
-    totalNutritionLbl.setFont(Font.font("Abel", FontWeight.NORMAL, 15));
-
+		// Displays the "Total Nutrition" label
+		// TODO: Change to button if we want the user to manually compute the total
+		// nutrition or keep the label if we want it to update every time a food is
+		// added to the food in meal list
+		Label totalNutritionLbl = new Label("Total Nutrition");
+		totalNutritionLbl.setFont(Font.font("Abel", FontWeight.NORMAL, 15));
+	  
     // Sets up the total nutrition list
     // TODO: Implement: either update when the user clicks on the "Total Nutrition"
     // button or update automatically when the user adds a new food to the food in
