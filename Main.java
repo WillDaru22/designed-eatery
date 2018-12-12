@@ -91,6 +91,7 @@ public class Main extends Application {
         // Creates a new FoodData object
         FoodData foodData = new FoodData();
         nutrientFilterRules = new ArrayList<String>();
+        nameFilterString = new String();
 
         // Displays title
         primaryStage.setTitle("Food Query and Meal Analysis");
@@ -261,6 +262,53 @@ public class Main extends Application {
         applyFilterBtn.setFont(Font.font("Abel", FontWeight.BOLD, 10));
         applyFilterBtn.setMinWidth(42);
         applyFilterBtn.setMaxWidth(42);
+        applyFilterBtn.setOnAction(new EventHandler<ActionEvent>() {
+            /*
+             * Handles clicking the "Apply" button
+             */
+            public void handle(ActionEvent event) {
+                try {
+                    List<FoodItem> filteredList = new ArrayList<FoodItem>();
+                    List<FoodItem> filteredList2 = new ArrayList<FoodItem>();
+                    if(nameFilterString.length() > 0) { 
+                        filteredList = foodData.filterByName(nameFilterString);
+                    }
+                    if(nutrientFilterRules.size() > 0) {
+                        filteredList2 = foodData.filterByNutrients(nutrientFilterRules);
+                    }
+                    if(nameFilterString.length() > 0 && nutrientFilterRules.size() > 0) {
+                        filteredList.retainAll(filteredList2);
+                        foodItemList = (ArrayList<FoodItem>) filteredList;
+                        foodItemList = sortFoodItemListByName(foodItemList);
+                        foodNameObservable.clear();
+                        for(int i = 0; i < foodItemList.size(); i++) {
+                            foodNameObservable.add(foodItemList.get(i).getName());
+                        }
+                    }
+                    else if(nameFilterString.length() > 0) {
+                        foodItemList = (ArrayList<FoodItem>) filteredList;
+                        foodItemList = sortFoodItemListByName(foodItemList);
+                        foodNameObservable.clear();
+                        for(int i = 0; i < foodItemList.size(); i++) {
+                            foodNameObservable.add(foodItemList.get(i).getName());
+                        }
+                    }
+                    else if(nutrientFilterRules.size() > 0) {
+                        foodItemList = (ArrayList<FoodItem>) filteredList2;
+                        foodItemList = sortFoodItemListByName(foodItemList);
+                        foodNameObservable.clear();
+                        for(int i = 0; i < foodItemList.size(); i++) {
+                            foodNameObservable.add(foodItemList.get(i).getName());
+                        }
+                    }
+                    else {
+                        return;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         // Button to reset the filters
         Button resetFilterBtn = new Button("Reset");
@@ -273,9 +321,18 @@ public class Main extends Application {
              */
             public void handle(ActionEvent event) {
                 try {
+                    nameFilterString = "";
+                    nutrientFilterRules.clear();
+                    foodItemList = (ArrayList<FoodItem>) foodData.getAllFoodItems();
+                    foodItemList = sortFoodItemListByName(foodItemList);
+                    foodNameObservable.clear();
+                    for (int i = 0; i < foodItemList.size(); i++) {
+                        foodNameObservable.add(foodItemList.get(i).getName());
+                    }
                     nameFilter.setTextFill(Color.BLACK);
                     nutrientFilter.setTextFill(Color.BLACK);
                 } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
