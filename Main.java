@@ -187,8 +187,8 @@ public class Main extends Application {
         // TODO: Implement: update the list of all foods when the filter is typed in
         Button nutrientFilter = new Button("Nutrients");
         nutrientFilter.setFont(Font.font("Abel", FontWeight.BOLD, 10));
-        nutrientFilter.setMinWidth(58);
-        nutrientFilter.setMaxWidth(58);
+        nutrientFilter.setMinWidth(62);
+        nutrientFilter.setMaxWidth(62);
         nutrientFilter.setOnAction(new EventHandler<ActionEvent>() {
             /*
              * Handles clicking on the nutrient filter
