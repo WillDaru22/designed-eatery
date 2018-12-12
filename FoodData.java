@@ -120,7 +120,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
 			foodNameList.add(foodItemList.get(i).getName());
 			nameToItemMap.put(foodItemList.get(i).getName(), foodItemList.get(i));
 		}
-		Collections.sort(foodNameList);
+		Collections.sort(foodNameList, String.CASE_INSENSITIVE_ORDER);
 		for (int i = 0; i < foodNameList.size(); i++)
 			newFoodItemList.add(nameToItemMap.get(foodNameList.get(i)));
 		foodItemList = newFoodItemList;
