@@ -8,7 +8,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 /**
  * This class represents the backend for managing all the operations associated
