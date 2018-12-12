@@ -157,10 +157,12 @@ public class Main extends Application {
               try {
                 List<FoodItem> filteredList = new ArrayList<FoodItem>();
                 filteredList = foodData.filterByName(nameFilterField.getText());
+                foodListBackup = foodItemList;
+                foodItemList = (ArrayList<FoodItem>) filteredList;
+                foodItemList = sortFoodItemListByName(foodItemList);
                 foodNameObservable.clear();
-                for (int i = 0; i < filteredList.size(); i++)
-                  foodNameObservable.add(filteredList.get(i).getName());
-                sortFoodInMealList();
+                for (int i = 0; i < foodItemList.size(); i++)
+                  foodNameObservable.add(foodItemList.get(i).getName());
                 stage.close();
               } catch (Exception e) {
                 e.printStackTrace();
