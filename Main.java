@@ -286,6 +286,7 @@ public class Main extends Application {
 					} else {
 						return;
 					}
+					foodCount.setText(Integer.toString(foodNameObservable.size()));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -311,6 +312,7 @@ public class Main extends Application {
 					for (int i = 0; i < foodItemList.size(); i++) {
 						foodNameObservable.add(foodItemList.get(i).getName());
 					}
+					foodCount.setText(Integer.toString(foodNameObservable.size()));
 					nameFilter.setTextFill(Color.BLACK);
 					nutrientFilter.setTextFill(Color.BLACK);
 				} catch (Exception e) {
@@ -584,8 +586,10 @@ public class Main extends Application {
 		foodNutritionLbl.setTextFill(Color.SLATEGREY);
 
 		// Displays the "Total Nutrition" label
-		Label totalNutritionLbl = new Label("\nTotal Nutrition");
+		Label totalNutritionLbl = new Label("Total Nutrition");
 		totalNutritionLbl.setFont(Font.font("Abel", FontWeight.NORMAL, 16));
+		totalNutritionLbl.setMaxHeight(40);
+		totalNutritionLbl.setMinHeight(40);
 
 		// Sets up the total nutrition list
 		totalNutritionObservable = FXCollections.observableArrayList("Calories: " + 0.0, "Fat: " + 0.0,
