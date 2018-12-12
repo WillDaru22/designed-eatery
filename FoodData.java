@@ -152,12 +152,8 @@ public class FoodData implements FoodDataADT<FoodItem> {
 			for (int i = 0; i < foodItemList.size(); i++) {
 				if (foodItemList.get(i).getName().toLowerCase().contains(substring.toLowerCase())) {
 					filter.add(foodItemList.get(i));
-					System.out.println(foodItemList.get(i).getName() + "is on filter list");
 				}
 			}
-		}
-		if (filter.size() == 0) {
-			System.out.println("Item not found");
 		}
 		return filter;
 	}
