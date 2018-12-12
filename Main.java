@@ -327,6 +327,28 @@ public class Main extends Application {
                   foodNameObservable.add(foodItemList.get(i).getName());
                 foodCount.setText(Integer.toString(foodNameObservable.size()));
                 stage.close();
+	      } catch (NumberFormatException ef) {
+                  //Runs only if invalid input
+                  try {
+                      //Displays an error box to notify the user than an error of invalid input has occured
+                      BorderPane errorBox = new BorderPane();
+                      errorBox.setPadding(new Insets(15, 12, 15, 12));
+                      Label errorLabel = new Label("    Error: Invalid Input.");
+                      errorLabel.setFont(Font.font("Abel", FontWeight.EXTRA_BOLD, 15));
+                      Button errorButton = new Button("Ok");
+                      errorButton.setMinSize(100, 27);
+                      errorBox.setTop(errorLabel);
+                      errorBox.setCenter(errorButton);
+                      Scene errorScene = new Scene(errorBox, 200, 100);
+                      Stage errorStage = new Stage();
+                      errorStage.setTitle("Error");
+                      errorStage.setScene(errorScene);
+                      errorStage.show();
+                      errorButton.setOnAction(ActionEvent -> errorStage.close());
+                      stage.close();
+                  } catch (Exception e) {
+                      e.printStackTrace();
+                  }
               } catch (Exception e) {
                 e.printStackTrace();
               }
