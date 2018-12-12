@@ -56,6 +56,8 @@ public class Main extends Application {
 
   private ArrayList<FoodItem> foodItemList; // List which stores the FoodItem objects in the "All
                                             // Foods" list
+  private ArrayList<FoodItem> foodListBackup;  // Copy of foodItemList to be restored when filters
+                                               // are reset
   private ObservableList<String> foodNameObservable; // An observable list of the food names. When
                                                      // this list is
                                                      // updated the GUI will update to show changes
