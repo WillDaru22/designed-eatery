@@ -57,8 +57,12 @@ public class Main extends Application {
 
 	private ArrayList<FoodItem> foodItemList; // List which stores the FoodItem objects in the "All
 												// Foods" list
-	private ArrayList<FoodItem> foodListBackup; // Copy of foodItemList to be restored when filters
-												// are reset
+  	private ArrayList<FoodItem> foodListBackup;  // Copy of foodItemList to be restored when filters
+                                               	     // are reset
+  	private String nameFilterString;  //String to filter by name by
+  
+ 	 private List<String> nutrientFilterRules;  //List of nutrient filter rules
+	
 	private ObservableList<String> foodNameObservable; // An observable list of the food names. When
 														// this list is
 														// updated the GUI will update to show changes
@@ -158,14 +162,15 @@ public class Main extends Application {
 						@Override
 						public void handle(ActionEvent event) {
 							try {
-								List<FoodItem> filteredList = new ArrayList<FoodItem>();
-								filteredList = foodData.filterByName(nameFilterField.getText());
-								foodListBackup = foodItemList;
-								foodItemList = (ArrayList<FoodItem>) filteredList;
-								foodItemList = sortFoodItemListByName(foodItemList);
-								foodNameObservable.clear();
-								for (int i = 0; i < foodItemList.size(); i++)
-									foodNameObservable.add(foodItemList.get(i).getName());
+								 nameFilterString = nameFilterField.getText();
+								//List<FoodItem> filteredList = new ArrayList<FoodItem>();
+								//filteredList = foodData.filterByName(nameFilterField.getText());
+								//foodListBackup = foodItemList;
+								//foodItemList = (ArrayList<FoodItem>) filteredList;
+								//foodItemList = sortFoodItemListByName(foodItemList);
+								//foodNameObservable.clear();
+								//for (int i = 0; i < foodItemList.size(); i++)
+								  //foodNameObservable.add(foodItemList.get(i).getName());
 								stage.close();
 							} catch (Exception e) {
 								e.printStackTrace();
@@ -225,10 +230,9 @@ public class Main extends Application {
 						@Override
 						public void handle(ActionEvent event) {
 							try {
-								FoodData name = new FoodData();
-								TextField input = new TextField();
-								List<String> inputList = (List<String>) input;
-								name.filterByNutrients(inputList);
+								String rule = new String(nutrientName.getText() + ",");
+								rule = rule + comparator.getText() + "," + nutrientValue.getText();
+							 	nutrientFilterRules.add(rule);
 								stage.close();
 							} catch (Exception e) {
 								e.printStackTrace();
