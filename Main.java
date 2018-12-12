@@ -406,8 +406,7 @@ public class Main extends Application {
 								newFood.addNutrient(new String("protein"),
 										new Double(Double.parseDouble(proteinCount.getText())));
 								foodData.addFoodItem(newFood);
-								foodItemList.clear();
-								foodItemList = (ArrayList<FoodItem>) foodData.getAllFoodItems();
+								foodItemList.add(newFood);
 								foodNameObservable.clear();
 								for (int i = 0; i < foodItemList.size(); i++)
 									foodNameObservable.add(foodItemList.get(i).getName());
