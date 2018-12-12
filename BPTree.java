@@ -448,18 +448,13 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 		 */
 		void insert(K key, V value) {
 			int location = Collections.binarySearch(keys, key);
-			int index = 0;
+			int valueIndex = location >= 0 ? location : -location - 1;
 			if (location >= 0) {
-				index = location + 1;
-			} else {
-				index = -location - 1;
-			}
-			if (location >= 0) {
-				values.set(index, value);
+				values.set(valueIndex, value);
 
 			} else {
-				keys.add(index, key);
-				values.add(index, value);
+				keys.add(valueIndex, key);
+				values.add(valueIndex, value);
 
 			}
 
