@@ -1,8 +1,6 @@
 package application;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * This class represents a food item with all its properties.
@@ -17,7 +15,7 @@ public class FoodItem {
     private String id;
 
     // Map of nutrients and value.
-    private HashMap<String, Double>();
+    private HashMap<String, Double> nutrients;
     
     /**
      * Constructor
@@ -27,7 +25,7 @@ public class FoodItem {
     public FoodItem(String id, String name) {
         this.name = name;
         this.id = id;
-        this.nutrients = new HashMap<String, Double> nutrients;
+        this.nutrients = new HashMap<String, Double> ();
     }
     
     /**
