@@ -181,7 +181,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
      */
   @Override
   public List<FoodItem> filterByNutrients(List<String> rules) {
-    String ruleArray[] = rules.get(0).split(" "); // split array into individual strings
+    String[] ruleArray = rules.get(0).toLowerCase().split(" "); // split array into individual strings
     List<FoodItem> filterList1 =
         indexes.get(ruleArray[0]).rangeSearch(Double.parseDouble(ruleArray[2]), ruleArray[1]);
     List<FoodItem> filterList2 = new ArrayList<FoodItem>();
