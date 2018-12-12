@@ -90,6 +90,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         // Creates a new FoodData object
         FoodData foodData = new FoodData();
+        nutrientFilterRules = new ArrayList<String>();
 
         // Displays title
         primaryStage.setTitle("Food Query and Meal Analysis");
