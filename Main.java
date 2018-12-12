@@ -1,5 +1,4 @@
-/**
- * Filename:   Main.java
+* Filename:   Main.java
  * Project:    Team Project, Milestone2, main JavaFX GUI interface
  * Authors:    Anders Carlsson, William Wilson, Sungjin Park, Jay Park
  *
@@ -57,12 +56,10 @@ public class Main extends Application {
 
 	private ArrayList<FoodItem> foodItemList; // List which stores the FoodItem objects in the "All
 												// Foods" list
-  	private ArrayList<FoodItem> foodListBackup;  // Copy of foodItemList to be restored when filters
-                                               	     // are reset
-  	private String nameFilterString;  //String to filter by name by
-  
- 	 private List<String> nutrientFilterRules;  //List of nutrient filter rules
-	
+	private ArrayList<FoodItem> foodListBackup; // Copy of foodItemList to be restored when filters
+												// are reset
+	private String nameFilterString; // String to filter by name by
+	private List<String> nutrientFilterRules; // List of nutrient filter rules
 	private ObservableList<String> foodNameObservable; // An observable list of the food names. When
 														// this list is
 														// updated the GUI will update to show changes
@@ -127,14 +124,15 @@ public class Main extends Application {
 		listOfFoodsInMeal.setMinHeight(391);
 
 		// Displays the filter label
-		Label filterLbl = new Label("   Filter by: ");
-		filterLbl.setFont(Font.font("Abel", FontWeight.NORMAL, 20));
+		Label filterLbl = new Label(" Filters: ");
+		filterLbl.setFont(Font.font("Abel", FontWeight.NORMAL, 15));
 
 		// Button to filter by name
 		// TODO: Implement: update the list of all foods when the filter is typed in
 		Button nameFilter = new Button("Name");
-		nameFilter.setFont(Font.font("Abel", FontWeight.NORMAL, 15));
-		nameFilter.setMinWidth(75);
+		nameFilter.setFont(Font.font("Abel", FontWeight.BOLD, 10));
+		nameFilter.setMinWidth(42);
+		nameFilter.setMaxWidth(42);
 		nameFilter.setOnAction(new EventHandler<ActionEvent>() {
 			/**
 			 * Handles clicking on the name filter
@@ -146,13 +144,13 @@ public class Main extends Application {
 					nameBox.setPadding(new Insets(15, 12, 15, 12));
 					nameBox.setSpacing(10);
 					TextField nameFilterField = new TextField();
-					Button confirmName = new Button("Filter");
+					Button confirmName = new Button("Add");
 					confirmName.setFont(Font.font("Abel", FontWeight.NORMAL, 15));
 					confirmName.setPrefSize(100, 20);
 					nameBox.getChildren().addAll(nameFilterField, confirmName);
 					Scene scene = new Scene(nameBox, 260, 50);
 					Stage stage = new Stage();
-					stage.setTitle("Filter By Name");
+					stage.setTitle("Name Filter");
 					stage.setScene(scene);
 					stage.show();
 					confirmName.setOnAction(new EventHandler<ActionEvent>() {
@@ -162,15 +160,16 @@ public class Main extends Application {
 						@Override
 						public void handle(ActionEvent event) {
 							try {
-								 nameFilterString = nameFilterField.getText();
-								//List<FoodItem> filteredList = new ArrayList<FoodItem>();
-								//filteredList = foodData.filterByName(nameFilterField.getText());
-								//foodListBackup = foodItemList;
-								//foodItemList = (ArrayList<FoodItem>) filteredList;
-								//foodItemList = sortFoodItemListByName(foodItemList);
-								//foodNameObservable.clear();
-								//for (int i = 0; i < foodItemList.size(); i++)
-								  //foodNameObservable.add(foodItemList.get(i).getName());
+								nameFilterString = nameFilterField.getText();
+								// List<FoodItem> filteredList = new ArrayList<FoodItem>();
+								// filteredList = foodData.filterByName(nameFilterField.getText());
+								// foodListBackup = foodItemList;
+								// foodItemList = (ArrayList<FoodItem>) filteredList;
+								// foodItemList = sortFoodItemListByName(foodItemList);
+								// foodNameObservable.clear();
+								// for (int i = 0; i < foodItemList.size(); i++)
+								// foodNameObservable.add(foodItemList.get(i).getName());
+								nameFilter.setTextFill(Color.DARKCYAN);
 								stage.close();
 							} catch (Exception e) {
 								e.printStackTrace();
@@ -186,8 +185,9 @@ public class Main extends Application {
 		// Button to filter by nutrition contents
 		// TODO: Implement: update the list of all foods when the filter is typed in
 		Button nutrientFilter = new Button("Nutrients");
-		nutrientFilter.setFont(Font.font("Abel", FontWeight.NORMAL, 15));
-		nutrientFilter.setMinWidth(75);
+		nutrientFilter.setFont(Font.font("Abel", FontWeight.BOLD, 10));
+		nutrientFilter.setMinWidth(58);
+		nutrientFilter.setMaxWidth(58);
 		nutrientFilter.setOnAction(new EventHandler<ActionEvent>() {
 			/*
 			 * Handles clicking on the nutrient filter
@@ -213,7 +213,7 @@ public class Main extends Application {
 					nutrientValue.setFont(Font.font("Abel", FontWeight.NORMAL, 15));
 					nutrientValue.setMaxSize(120, 27);
 					nutrientValue.setMinSize(120, 27);
-					Button confirmNutrient = new Button("Filter");
+					Button confirmNutrient = new Button("Add rule");
 					confirmNutrient.setFont(Font.font("Abel", FontWeight.NORMAL, 15));
 					confirmNutrient.setMinSize(100, 27);
 					nutrientBox.getChildren().addAll(nutrientName, comparator, nutrientValue, confirmNutrient);
@@ -232,7 +232,8 @@ public class Main extends Application {
 							try {
 								String rule = new String(nutrientName.getText() + " ");
 								rule = rule + comparator.getText() + " " + nutrientValue.getText();
-							 	nutrientFilterRules.add(rule);
+								nutrientFilterRules.add(rule);
+								nutrientFilter.setTextFill(Color.DARKCYAN);
 								stage.close();
 							} catch (Exception e) {
 								e.printStackTrace();
@@ -241,6 +242,37 @@ public class Main extends Application {
 					});
 				} catch (Exception e) {
 					e.printStackTrace();
+				}
+			}
+		});
+
+		// Line which separates the filters from the apply/reset buttons
+		Line filterLine = new Line();
+		filterLine.setStartX(100.0f);
+		filterLine.setStartY(0.0f);
+		filterLine.setEndX(100.0f);
+		filterLine.setEndY(20.0f);
+
+		// Button to apply the filters
+		Button applyFilterBtn = new Button("Apply");
+		applyFilterBtn.setFont(Font.font("Abel", FontWeight.BOLD, 10));
+		applyFilterBtn.setMinWidth(42);
+		applyFilterBtn.setMaxWidth(42);
+
+		// Button to reset the filters
+		Button resetFilterBtn = new Button("Reset");
+		resetFilterBtn.setFont(Font.font("Abel", FontWeight.BOLD, 10));
+		resetFilterBtn.setMinWidth(42);
+		resetFilterBtn.setMaxWidth(42);
+		resetFilterBtn.setOnAction(new EventHandler<ActionEvent>() {
+			/*
+			 * Handles clicking the "Reset" button
+			 */
+			public void handle(ActionEvent event) {
+				try {
+					nameFilter.setTextFill(Color.BLACK);
+					nutrientFilter.setTextFill(Color.BLACK);
+				} catch (Exception e) {
 				}
 			}
 		});
@@ -512,16 +544,6 @@ public class Main extends Application {
 		// TODO: Change to button if we want the user to manually compute the total
 		// nutrition or keep the label if we want it to update every time a food is
 		// added to the food in meal list
-
-		Button totalNutritionBtn = new Button("Total Nutrition");
-		totalNutritionBtn.setFont(Font.font("Abel", FontWeight.NORMAL, 15));
-		totalNutritionBtn.setPrefSize(300, 38);
-		totalNutritionBtn.setOnAction(new EventHandler<ActionEvent>() {
-
-			public void handle(ActionEvent event) {
-				calculateTotal();
-			}
-		});
 		Label totalNutritionLbl = new Label("Total Nutrition");
 		totalNutritionLbl.setFont(Font.font("Abel", FontWeight.NORMAL, 15));
 
@@ -529,8 +551,23 @@ public class Main extends Application {
 		// TODO: Implement: either update when the user clicks on the "Total Nutrition"
 		// button or update automatically when the user adds a new food to the food in
 		// meal list
-		totalNutritionObservable = FXCollections.observableArrayList("Calories: " + 0.0, "Fat: " + 0.0,
-				"Carbohydrates: " + 0.0, "Fiber: " + 0.0, "Protein: " + 0.0);
+
+		Double totCal = 0.0;
+		Double totCarbs = 0.0;
+		Double totFat = 0.0;
+		Double totPro = 0.0;
+		Double totFib = 0.0;
+		for (FoodItem i : foodItemList) {
+			totCal = i.getNutrientValue("calories");
+			totCarbs = i.getNutrientValue("carbohydrate");
+			totFat = i.getNutrientValue("fat");
+			totPro = i.getNutrientValue("protein");
+			totFib = i.getNutrientValue("fiber");
+		}
+
+		totalNutritionObservable = FXCollections.observableArrayList("Calories: " + totCal, "Fat: " + totFat,
+				"Carbohydrates: " + totCarbs, "Fiber: " + totFib, "Protein: " + totPro);
+
 		ListView<String> totalNutritionList = new ListView<String>(totalNutritionObservable);
 		totalNutritionList.setMaxWidth(320);
 		totalNutritionList.setMinWidth(320);
@@ -540,7 +577,8 @@ public class Main extends Application {
 		// Horizontal box which stores the filter buttons
 		HBox filterHbox = new HBox();
 		filterHbox.setSpacing(10);
-		filterHbox.getChildren().addAll(filterLbl, nameFilter, nutrientFilter);
+		filterHbox.getChildren().addAll(filterLbl, nameFilter, nutrientFilter, filterLine, applyFilterBtn,
+				resetFilterBtn);
 
 		// Horizontal box to hold the counter label and value
 		HBox foodCounterHbox = new HBox();
@@ -575,7 +613,7 @@ public class Main extends Application {
 		nutritionVbox.setSpacing(16);
 		nutritionVbox.setMaxWidth(300);
 		nutritionVbox.getChildren().addAll(nutritionLbl, foodNutritionLbl, nutritionList, totalNutritionLbl,
-				totalNutritionList, totalNutritionBtn);
+				totalNutritionList);
 
 		// Horizontal box which contains the two vertical boxes which make up the
 		// "Current Meal" section
@@ -616,31 +654,11 @@ public class Main extends Application {
 		return newFoodItemList;
 	}
 
-	private void calculateTotal() {
-
-		Double totCal = 0.0;
-		Double totCarbs = 0.0;
-		Double totFat = 0.0;
-		Double totPro = 0.0;
-		Double totFib = 0.0;
-		for (FoodItem i : foodInMealList) {
-			totCal += i.getNutrientValue("calories");
-			totCarbs += i.getNutrientValue("carbohydrate");
-			totFat += i.getNutrientValue("fat");
-			totPro += i.getNutrientValue("protein");
-			totFib += i.getNutrientValue("fiber");
-		}
-
-		totalNutritionObservable.clear();
-		totalNutritionObservable.addAll("Calories: " + totCal, "Fat: " + totFat, "Carbohydrates: " + totCarbs,
-				"Fiber: " + totFib, "Protein: " + totPro);
-
-	}
-
 	/**
 	 * Main method, launches the program.
 	 * 
-	 * @param args are the arguments
+	 * @param args
+	 *            are the arguments
 	 */
 	public static void main(String[] args) {
 		launch(args);
