@@ -30,10 +30,10 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 	// Branching factor is the number of children nodes
 	// for internal nodes of the tree
 	private int branchingFactor;
-	private static final int DEFAULT = 100;
+	private static final int TEMPFACTOR = 99; // default value for branching factor, set as 99 as default
 
 	public BPTree() {
-		this(DEFAULT);
+		this(TEMPFACTOR);
 	}
 
 	/**
@@ -69,13 +69,12 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 		if (!comparator.contentEquals(">=") && !comparator.contentEquals("==") && !comparator.contentEquals("<="))
 			return new ArrayList<V>();
 
-		ArrayList<V> searchList = new ArrayList<V>();
-
+		ArrayList<V> rangeList = new ArrayList<V>();
 		if (root != null) {
-			searchList.addAll(root.rangeSearch(key, comparator));
+			rangeList.addAll(root.rangeSearch(key, comparator));
 		}
 
-		return searchList;
+		return rangeList;
 	}
 
 	/*
@@ -280,11 +279,16 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 		List<V> rangeSearch(K key, String comparator) {
 			List<V> rangeList = new ArrayList<V>();
 
-			if (comparator.equals("<=")) {
+			switch (comparator) {
+			case "<=":
 				rangeList.addAll(children.get(0).rangeSearch(key, comparator));
-			} else if (comparator.equals(">=")) {
+				break;
+
+			case ">=":
 				for (int i = 0; i < keys.size(); ++i) {
 
+					// finds rightmost key that satisfies the comparator and retrieves its right
+					// child
 					if (keys.get(i).compareTo(key) < 0) {
 						if (i == (keys.size() - 1)) {
 							rangeList.addAll(children.get(i + 1).rangeSearch(key, comparator));
@@ -297,10 +301,12 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 						break;
 					}
 				}
+				break;
 
-			} else if (comparator.equals("==")) {
+			case "==":
 				for (int i = 0; i < keys.size(); ++i) {
-
+					// finds rightmost key that satisfies the comparator and retrieves its right
+					// child
 					if (keys.get(i).compareTo(key) < 0) {
 						if (i == (keys.size() - 1)) {
 							rangeList.addAll(children.get(i + 1).rangeSearch(key, comparator));
@@ -316,9 +322,10 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 						break;
 					}
 				}
+				break;
 			}
-			return rangeList;
 
+			return rangeList;
 		}
 
 		@Override
