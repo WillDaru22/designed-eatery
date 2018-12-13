@@ -180,10 +180,18 @@ public class FoodData implements FoodDataADT<FoodItem> {
      */
   @Override
   public List<FoodItem> filterByNutrients(List<String> rules) {
-    String[] ruleArray = rules.get(0).toLowerCase().split(" "); // split array into individual strings
-    List<FoodItem> filterList1 =
-        indexes.get(ruleArray[0]).rangeSearch(Double.parseDouble(ruleArray[2]), ruleArray[1]);
-    List<FoodItem> filterList2 = new ArrayList<FoodItem>();
+    String[] ruleArray = new String[0]; // split array into individual strings
+    List<FoodItem> filterList1 = new ArrayList<FoodItem>();
+    List<FoodItem> finalList = new ArrayList<FoodItem>();
+    for(int copy = 0; copy < foodItemList.size(); copy++) {
+        finalList.add(foodItemList.get(copy));
+    }
+    for(int i = 0; i < rules.size(); i++) {
+        ruleArray = rules.get(i).toLowerCase().split(" ");
+        filterList1 = indexes.get(ruleArray[0]).rangeSearch(Double.parseDouble(ruleArray[2]), ruleArray[1]);
+        finalList.retainAll(filterList1);
+    }
+    /*List<FoodItem> filterList2 = new ArrayList<FoodItem>();
     for (int i = 1; i < rules.size(); i++) {
       ruleArray = rules.get(i).split(" ");
       filterList2 =
@@ -194,8 +202,10 @@ public class FoodData implements FoodDataADT<FoodItem> {
           j = j - 1;
         }
       }
-    }
-    return filterList1;
+    }*/
+    //System.out.println(finalList.size());
+    //System.out.println(filterList2.size());
+    return finalList;
   }
 
 	/**
