@@ -231,7 +231,28 @@ public class Main extends Application {
                         @Override
                         public void handle(ActionEvent event) {
                             try {
-                                Double.parseDouble(nutrientValue.getText());
+                                if (!(nutrientName.getText().equalsIgnoreCase("calories")
+                                                || nutrientName.getText().equalsIgnoreCase("fat")
+                                                || nutrientName.getText()
+                                                                .equalsIgnoreCase("carbohydrate")
+                                                || nutrientName.getText().equalsIgnoreCase("fiber")
+                                                || nutrientName.getText()
+                                                                .equalsIgnoreCase("protein"))) {
+                                    throw new NumberFormatException();
+                                }
+                                if (!(comparator.getText().equalsIgnoreCase(">=")
+                                                || comparator.getText().equalsIgnoreCase("==")
+                                                || comparator.getText().equalsIgnoreCase("<="))) {
+                                    throw new NumberFormatException();
+                                }
+                                Double.parseDouble(nutrientValue.getText()); // forces an
+                                                                             // exception to be
+                                                                             // thrown if the
+                                                                             // user does not
+                                                                             // enter a
+                                                                             // numerical value
+                                                                             // into
+                                                                             // nutrientValue
                                 String rule = new String(nutrientName.getText() + " ");
                                 rule = rule + comparator.getText() + " " + nutrientValue.getText();
                                 nutrientFilterRules.add(rule);
