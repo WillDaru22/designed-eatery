@@ -437,6 +437,7 @@ public class Main extends Application {
                                                 Double.parseDouble(proteinCount.getText())));
                                 foodData.addFoodItem(newFood);
                                 if (foodItemList.size() == (foodData.getAllFoodItems().size())) {
+                                    foodItemList = (ArrayList<FoodItem>) foodData.getAllFoodItems();
                                     foodNameObservable.clear();
                                     for (int i = 0; i < foodItemList.size(); i++) {
                                         foodNameObservable.add(foodItemList.get(i).getName());
