@@ -231,10 +231,31 @@ public class Main extends Application {
                         @Override
                         public void handle(ActionEvent event) {
                             try {
+                                Double.parseDouble(nutrientValue.getText());
                                 String rule = new String(nutrientName.getText() + " ");
                                 rule = rule + comparator.getText() + " " + nutrientValue.getText();
                                 nutrientFilterRules.add(rule);
                                 nutrientFilter.setTextFill(Color.DARKCYAN);
+                                stage.close();
+                            } catch (NumberFormatException ef) {
+                                // Displays an error box to notify the user than an error of
+                                // invalid input has
+                                // occured
+                                BorderPane errorBox = new BorderPane();
+                                errorBox.setPadding(new Insets(15, 12, 15, 12));
+                                Label errorLabel = new Label("    Error: Invalid Input.");
+                                errorLabel.setFont(
+                                                Font.font("Abel", FontWeight.EXTRA_BOLD, 15));
+                                Button errorButton = new Button("Ok");
+                                errorButton.setMinSize(100, 27);
+                                errorBox.setTop(errorLabel);
+                                errorBox.setCenter(errorButton);
+                                Scene errorScene = new Scene(errorBox, 200, 100);
+                                Stage errorStage = new Stage();
+                                errorStage.setTitle("Error");
+                                errorStage.setScene(errorScene);
+                                errorStage.show();
+                                errorButton.setOnAction(ActionEvent -> errorStage.close());
                                 stage.close();
                             } catch (Exception e) {
                                 e.printStackTrace();
