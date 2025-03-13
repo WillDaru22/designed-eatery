@@ -3,13 +3,13 @@
 ## Authors
 ### d-team 81
 
-Anders Carlsson (awcarlsson@wisc.edu) X-Team 100
+Anders Carlsson () X-Team 100
 
-Jay Park (park377@wisc.edu) X-Team 100
+Jay Park () X-Team 100
 
-Sung Jin Park (spark288@wisc.edu) X-Team 119
+Sung Jin Park () X-Team 119
 
-William Wilson (wwilson4@wisc.edu) X-Team 100
+William Wilson () X-Team 100
 
 ## Requirements
 Java
